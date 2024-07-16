@@ -5,6 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>News Article</title>
     <link rel="stylesheet" href="styles.css">
+    <script>
+        // Disable right-click context menu
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // Disable specific keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && e.key === 'I') || 
+                (e.ctrlKey && e.shiftKey && e.key === 'J') || 
+                (e.ctrlKey && e.key === 'U') || 
+                (e.ctrlKey && e.key === 'S')) {
+                e.preventDefault();
+            }
+        });
+
+        // Detect and close developer tools
+        setInterval(function() {
+            if (window.devtools.open) {
+                window.close();
+            }
+        }, 1000);
+
+        // Hide developer tools detection warning
+        window.devtools = { open: false };
+        (function() {
+            const devtools = { open: false };
+            const threshold = 160;
+            const emitEvent = (state) => window.dispatchEvent(new Event(state ? 'devtoolsopen' : 'devtoolsclose'));
+            setInterval(() => {
+                const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+                const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+                const orientationThreshold = window.outerWidth - window.innerWidth < threshold && window.outerHeight - window.innerHeight < threshold;
+                if (!(heightThreshold && widthThreshold) && !orientationThreshold) {
+                    if (devtools.open) {
+                        devtools.open = false;
+                        emitEvent(false);
+                    }
+                } else {
+                    if (!devtools.open) {
+                        devtools.open = true;
+                        emitEvent(true);
+                    }
+                }
+            }, 500);
+        })();
+    </script>
 </head>
 <body>
     <div class="container">
